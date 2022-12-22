@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  lama:
+    build: lama
+    tty: true
+    volumes:
+      - ..:/home/user/project
+      - ../big-lama:/data/checkpoint
+      - ../test_images:/data/input
+      - ../output:/data/output
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: [gpu]
+    working_dir: /home/user/project
+    command: >
+      sh -c "python bin/predict.py model.path=/data/checkpoint indir=/data/input outdir=/data/output dataset.img_suffix=.jpg"
+
